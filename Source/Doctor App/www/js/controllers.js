@@ -1,8 +1,26 @@
-angular.module('directory.controllers', [])
+angular.module('directory.controllers', ['ngCordova'])
 
-    .controller('EmployeeIndexCtrl', function ($scope, EmployeeService) {
+    .controller('EmployeeIndexCtrl', function ($scope, EmployeeService,$cordovaCamera) {
 
         $scope.searchKey = "";
+       $scope.takePicture = function() {
+        var options = { 
+            quality : 75, 
+            destinationType : Camera.DestinationType.DATA_URL, 
+            sourceType : Camera.PictureSourceType.CAMERA, 
+            allowEdit : true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 300,
+            targetHeight: 300,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+           
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            $scope.imgURI = "data:image/jpeg;base64," + imageData;
+        }, function(err) {
+        });
+    }
 
         $scope.clearSearch = function () {
             $scope.searchKey = "";
@@ -33,7 +51,7 @@ angular.module('directory.controllers', [])
            $scope.thirdtest = function (searchkey) {
             
                 if(searchkey.length > 2){
-                return true;}else return false;                
+                return false;}else return true;                
             
         }
         
